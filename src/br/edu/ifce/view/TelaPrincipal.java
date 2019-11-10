@@ -331,12 +331,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.jTextField_q1.setBorder(BorderFactory.createLineBorder(corCinza, 1));
         this.jTextField_q2.setBorder(BorderFactory.createLineBorder(corCinza, 1));
         this.jTextField_bitR.setBorder(BorderFactory.createLineBorder(corCinza, 1));
-        this.jTextField_campos_obrigatorios.setText("");
-        this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+    }
+    
+    private void limparCamposDeEntrada() {
+        this.jTextField_caminho_do_arquivo.setText("");
+        this.jTextField_q1.setText("");
+        this.jTextField_q2.setText("");
+        this.jTextField_bitR.setText("");
     }
     
     private boolean validarCamposDeEntrada() {
         int aux = 0;
+        
+        this.jTextField_campos_obrigatorios.setForeground(Color.RED);
         
         if(this.jTextField_caminho_do_arquivo.getText().equals("")) {
             this.jTextField_caminho_do_arquivo.setBorder(BorderFactory.createLineBorder(Color.RED, 1));
@@ -363,10 +370,64 @@ public class TelaPrincipal extends javax.swing.JFrame {
             this.jTextField_campos_obrigatorios.setText(aux + " campos obrigatórios vazios");
             return false;
         } else {
-            this.jTextField_campos_obrigatorios.setText("Executando");
             this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
             return true;
         }
+    }
+    
+    private Long getValorQ1() {
+        Long q1;
+        
+        try {
+            q1 = Long.parseLong(this.jTextField_q1.getText());
+            return q1;
+        } catch(NumberFormatException e) {
+            this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+            this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+            this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+            System.out.println("NumberFormatException: falha na conversão de valores do campo Q1.");
+            JOptionPane.showMessageDialog(this, "Campo Q1 só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return -1L;
+        }
+    }
+    
+    private Long getValorQ2() {
+        Long q2;
+        
+        try {
+            q2 = Long.parseLong(this.jTextField_q2.getText());
+            return q2;
+        } catch(NumberFormatException e) {
+            this.jTextField_q2.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+            this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+            this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+            System.out.println("NumberFormatException: falha na conversão de valores do campo Q2.");
+            JOptionPane.showMessageDialog(this, "Campo Q2 só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return -1L;
+        }
+    }
+    
+    private Long getValorBitR() {
+        Long bit_R;
+        
+        try {
+            bit_R = Long.parseLong(this.jTextField_bitR.getText());
+            return bit_R;
+        } catch(NumberFormatException e) {
+            this.jTextField_bitR.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+            this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+            this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+            System.out.println("NumberFormatException: falha na conversão de valores do campo BIT R.");
+            JOptionPane.showMessageDialog(this, "Campo BIT R só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return -1L;
+        }
+    }
+    
+    private void executarPrograma(String caminhoArquivo, Long Q1, Long Q2, Long bitR) {
+        System.out.println("aqui");
+        this.jTextField_campos_obrigatorios.setText("Executando");
+        this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
+        System.out.println("aqui2");
     }
     
     private void jMenuItem_sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_sobreActionPerformed
@@ -390,7 +451,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         File f = fileChooser.getSelectedFile();
         
-        this.jTextField_caminho_do_arquivo.setText(f.getPath());
+        try{
+            this.jTextField_caminho_do_arquivo.setText(f.getPath());
+        } catch(NullPointerException e) {
+            System.out.println("NullPointerException: falha na captura do caminho do arquivo.");
+            JOptionPane.showMessageDialog(this, "Falha na captura do caminho do arquivo. Tente novamente ou reinicie este software", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
     }//GEN-LAST:event_jButton_procurarActionPerformed
 
     private void jButton_executarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_executarActionPerformed
@@ -398,9 +465,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.reinicializarCamposDeEntrada();
         
         if(this.validarCamposDeEntrada()) {
+            String arquivo = this.jTextField_caminho_do_arquivo.getText();
+            Long Q1   = this.getValorQ1();
+            Long Q2   = this.getValorQ2();
+            Long bitR = this.getValorBitR();
             
-        } else {
+            if(Q1 == -1L || Q2 == -1L || bitR == -1L) return; //Falha na leitura dos campos Q1, Q2 ou bitR;
             
+            this.executarPrograma(arquivo, Q1, Q2, bitR);
+            
+            this.reinicializarCamposDeEntrada();
+            this.limparCamposDeEntrada();
+                    
         }
     }//GEN-LAST:event_jButton_executarActionPerformed
 
