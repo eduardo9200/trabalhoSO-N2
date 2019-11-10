@@ -5,6 +5,7 @@
  */
 package br.edu.ifce.view;
 
+import br.edu.ifce.saida.Tabela;
 import java.awt.Color;
 import java.io.File;
 import javax.swing.BorderFactory;
@@ -17,11 +18,14 @@ import javax.swing.JOptionPane;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
+    Tabela tabelaResultado = new Tabela();
     /**
      * Creates new form TelaPrincipal
      */
     public TelaPrincipal() {
         initComponents();
+        
+        this.jTable_saida.setModel(tabelaResultado);
     }
 
     /**
@@ -222,8 +226,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
             jPanel_tabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_tabelaLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(152, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane_saida.addTab("TABELA", jPanel_tabela);
@@ -237,7 +241,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanel_telaPrincipalLayout.setHorizontalGroup(
             jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_telaPrincipalLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(30, Short.MAX_VALUE)
                 .addGroup(jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane_saida, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel_telaPrincipalLayout.createSequentialGroup()
