@@ -478,26 +478,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
         Thread mru            = new Mru(this, conteudoArquivo, Q1, Q2);
         Thread algoritmoOtimo = new AlgoritmoOtimo(this, conteudoArquivo, Q1, Q2);
         
-        fifo.run();
-        segundaChance.run();
-        nur.run();
-        mru.run();
-        algoritmoOtimo.run();
+        fifo.start();
+        segundaChance.start();
+        nur.start();
+        mru.start();
+        algoritmoOtimo.start();
     }
     
     private void executarPrograma(String caminhoArquivo, Long Q1, Long Q2, Long bitR) {
         
-        String texto = this.getConteudoArquivo(caminhoArquivo);
-        this.jTextArea_conteudo_do_arquivo.append(texto);
+        String conteudoArquivo = this.getConteudoArquivo(caminhoArquivo);
+        this.jTextArea_conteudo_do_arquivo.append(conteudoArquivo);
         
-        if(texto!=null){
-            this.executarThreads(texto, Q1, Q2, bitR);
-            System.out.println("fifo " + this.resultadoFifo);
+        if(conteudoArquivo != null){
+            this.executarThreads(conteudoArquivo, Q1, Q2, bitR);
+            
+            Resultado resultado = new Resultado(10, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+            this.tabelaResultado.adicionarLinha(resultado);
+            
+            /*System.out.println("fifo " + this.resultadoFifo);
             System.out.println("segunda chance " + this.resultadoSegundaChance);
             System.out.println("nur " + this.resultadoNur);
             System.out.println("mru " + this.resultadoMru);
-            System.out.println("otimo " + this.resultadoOtimo);
-            Resultado resultado = new Resultado(10, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+            System.out.println("otimo " + this.resultadoOtimo);*/
         }
     }
     
