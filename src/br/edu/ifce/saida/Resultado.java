@@ -32,6 +32,30 @@ public class Resultado {
         this.acertosMRU            = acertosMRU;
         this.acertosAlgoritmoOtimo = acertosAlgoritmoOtimo;
     }
+
+    public void setNumeroFrames(int numeroFrames) {
+        this.numeroFrames = numeroFrames;
+    }
+
+    public void setAcertosFIFO(int acertosFIFO) {
+        this.acertosFIFO = acertosFIFO;
+    }
+
+    public void setAcertosSegundaChance(int acertosSegundaChance) {
+        this.acertosSegundaChance = acertosSegundaChance;
+    }
+
+    public void setAcertosNUR(int acertosNUR) {
+        this.acertosNUR = acertosNUR;
+    }
+
+    public void setAcertosMRU(int acertosMRU) {
+        this.acertosMRU = acertosMRU;
+    }
+
+    public void setAcertosAlgoritmoOtimo(int acertosAlgoritmoOtimo) {
+        this.acertosAlgoritmoOtimo = acertosAlgoritmoOtimo;
+    }
     
     public int getNumeroFrames() {
         return numeroFrames;

@@ -5,9 +5,19 @@
  */
 package br.edu.ifce.view;
 
+import br.edu.ifce.saida.Resultado;
 import br.edu.ifce.saida.Tabela;
+import br.edu.ifce.threads.AlgoritmoOtimo;
+import br.edu.ifce.threads.Fifo;
+import br.edu.ifce.threads.Mru;
+import br.edu.ifce.threads.Nur;
+import br.edu.ifce.threads.SegundaChance;
 import java.awt.Color;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -18,6 +28,12 @@ import javax.swing.JOptionPane;
  */
 public class TelaPrincipal extends javax.swing.JFrame {
 
+    private int resultadoFifo = 0;
+    private int resultadoSegundaChance = 0;
+    private int resultadoNur = 0;
+    private int resultadoMru = 0;
+    private int resultadoOtimo = 0;
+    
     Tabela tabelaResultado = new Tabela();
     /**
      * Creates new form TelaPrincipal
@@ -232,6 +248,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         jTabbedPane_saida.addTab("TABELA", jPanel_tabela);
 
+        jTextArea_conteudo_do_arquivo.setEditable(false);
         jTextArea_conteudo_do_arquivo.setColumns(20);
         jTextArea_conteudo_do_arquivo.setRows(5);
         jScrollPane2.setViewportView(jTextArea_conteudo_do_arquivo);
@@ -423,11 +440,65 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
     
+    private String getConteudoArquivo(String caminhoArquivo) {
+        Path arquivo = Paths.get(caminhoArquivo);
+        try {
+            byte[] bytesArquivo = Files.readAllBytes(arquivo);
+            String texto = new String(bytesArquivo);
+            
+            return texto;
+            
+        } catch(IOException e) {
+            System.out.println(e);
+            this.jTextField_campos_obrigatorios.setText("Falha na leitura do arquivo");
+            this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+            JOptionPane.showMessageDialog(this, "Falha na leitura. Verifique se há algum arquivo selecionado, revise sua URL ou tente novamente", "ERRO", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    
+    public void setResultado(String algoritmo, int resultado) {
+        if(algoritmo.equals("FIFO")) {
+            this.resultadoFifo = resultado;
+        } else if(algoritmo.equals("SEGUNDA_CHANCE")) {
+            this.resultadoSegundaChance = resultado;
+        } else if(algoritmo.equals("NUR")) {
+            this.resultadoNur = resultado;
+        } else if(algoritmo.equals("MRU")) {
+            this.resultadoMru = resultado;
+        } else if(algoritmo.equals("OTIMO")) {
+            this.resultadoOtimo = resultado;
+        } 
+    }
+    
+    private void executarThreads(String conteudoArquivo, Long Q1, Long Q2, Long bitR) {
+        Thread fifo           = new Fifo(this, conteudoArquivo, Q1, Q2);
+        Thread segundaChance  = new SegundaChance(this, conteudoArquivo, Q1, Q2, bitR);
+        Thread nur            = new Nur(this, conteudoArquivo, Q1, Q2, bitR);
+        Thread mru            = new Mru(this, conteudoArquivo, Q1, Q2);
+        Thread algoritmoOtimo = new AlgoritmoOtimo(this, conteudoArquivo, Q1, Q2);
+        
+        fifo.run();
+        segundaChance.run();
+        nur.run();
+        mru.run();
+        algoritmoOtimo.run();
+    }
+    
     private void executarPrograma(String caminhoArquivo, Long Q1, Long Q2, Long bitR) {
-        System.out.println("aqui");
-        this.jTextField_campos_obrigatorios.setText("Executando");
-        this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
-        System.out.println("aqui2");
+        
+        String texto = this.getConteudoArquivo(caminhoArquivo);
+        this.jTextArea_conteudo_do_arquivo.append(texto);
+        
+        if(texto!=null){
+            this.executarThreads(texto, Q1, Q2, bitR);
+            System.out.println("fifo " + this.resultadoFifo);
+            System.out.println("segunda chance " + this.resultadoSegundaChance);
+            System.out.println("nur " + this.resultadoNur);
+            System.out.println("mru " + this.resultadoMru);
+            System.out.println("otimo " + this.resultadoOtimo);
+            Resultado resultado = new Resultado(10, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+        }
     }
     
     private void jMenuItem_sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_sobreActionPerformed
