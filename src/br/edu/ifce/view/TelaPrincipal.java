@@ -478,11 +478,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         Thread mru            = new Mru(this, conteudoArquivo, Q1, Q2);
         Thread algoritmoOtimo = new AlgoritmoOtimo(this, conteudoArquivo, Q1, Q2);
         
+        this.jTextField_campos_obrigatorios.setText("Executando");
+        this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
+        
         fifo.start();
         segundaChance.start();
         nur.start();
         mru.start();
         algoritmoOtimo.start();
+        
+        this.jTextField_campos_obrigatorios.setText("Finalizado");
     }
     
     private void executarPrograma(String caminhoArquivo, Long Q1, Long Q2, Long bitR) {
