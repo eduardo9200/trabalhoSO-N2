@@ -460,7 +460,18 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         try {
             bit_R = Long.parseLong(this.jTextField_bitR.getText());
-            return bit_R;
+            
+            if (bit_R < 1) {
+                this.jTextField_bitR.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+                this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+                this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+                System.out.println("NumberException: valor BitR inválido.");
+                JOptionPane.showMessageDialog(this, "Campo BitR não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
+                return -1L;
+            }else {
+                return bit_R;
+            }
+                        
         } catch(NumberFormatException e) {
             this.jTextField_bitR.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
             this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
