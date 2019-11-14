@@ -85,7 +85,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         setTitle("Algoritmos de Substituição de Páginas");
         setMaximumSize(new java.awt.Dimension(900, 600));
         setMinimumSize(new java.awt.Dimension(900, 600));
-        setPreferredSize(new java.awt.Dimension(900, 600));
 
         jPanel_telaPrincipal.setMaximumSize(new java.awt.Dimension(900, 600));
         jPanel_telaPrincipal.setMinimumSize(new java.awt.Dimension(900, 600));
@@ -334,7 +333,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel_telaPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 561, Short.MAX_VALUE)
+                .addComponent(jPanel_telaPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, 567, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -395,9 +394,29 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private Long getValorQ1() {
         Long q1;
         
+        Long q2 = Long.parseLong(this.jTextField_q2.getText());
+        
         try {
             q1 = Long.parseLong(this.jTextField_q1.getText());
-            return q1;
+            
+            if (q1 < 1 && q2 > 0) {
+                this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+                this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+                this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+                System.out.println("NumberException: valor Q1 inválido.");
+                JOptionPane.showMessageDialog(this, "Campo Q1 não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
+                return -1L;
+            }else if (q1 > q2 && q2 > 0) {
+                this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+                this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+                this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+                System.out.println("NumberException: valor Q1 inválido");
+                JOptionPane.showMessageDialog(this, "Campo Q1 deve ser menor ou igual ao campo Q2", "ERRO", JOptionPane.ERROR_MESSAGE);
+                return -1L;
+            }else {
+                return q1;
+            }
+                        
         } catch(NumberFormatException e) {
             this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
             this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
@@ -413,7 +432,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         try {
             q2 = Long.parseLong(this.jTextField_q2.getText());
-            return q2;
+            
+            if (q2 < 1) {
+                this.jTextField_q2.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
+                this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
+                this.jTextField_campos_obrigatorios.setForeground(Color.RED);
+                System.out.println("NumberException: valor Q2 inválido.");
+                JOptionPane.showMessageDialog(this, "Campo Q2 não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
+                return -1L;
+            }else {
+                return q2;
+            }
+            
+            
         } catch(NumberFormatException e) {
             this.jTextField_q2.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
             this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");

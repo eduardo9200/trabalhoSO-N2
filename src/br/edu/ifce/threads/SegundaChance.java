@@ -37,13 +37,11 @@ public class SegundaChance extends Thread {
        
         String texto = conteudoArquivo;
         String[] numerosTexto = texto.split("-");
-        Vector<Integer> numeros = new Vector<>();
-        for (int i = 0; i < numerosTexto.length; i++) {
-            numeros.add(Integer.parseInt(numerosTexto[i]));
-        }
+
+        int teste = Integer.parseInt("1");
          
 
-        this.acertos = numeros.size();
+        this.acertos = numerosTexto.length;
         this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
     }
     
