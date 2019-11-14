@@ -258,7 +258,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanel_telaPrincipalLayout.setHorizontalGroup(
             jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_telaPrincipalLayout.createSequentialGroup()
-                .addContainerGap(30, Short.MAX_VALUE)
+                .addContainerGap(20, Short.MAX_VALUE)
                 .addGroup(jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane_saida, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel_telaPrincipalLayout.createSequentialGroup()
@@ -444,7 +444,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         Path arquivo = Paths.get(caminhoArquivo);
         try {
             byte[] bytesArquivo = Files.readAllBytes(arquivo);
-            String texto = new String(bytesArquivo);
+            String texto = new String(bytesArquivo).replaceAll("[^\\d-]", "");
             
             return texto;
             
@@ -471,12 +471,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         } 
     }
     
-    private void executarThreads(String conteudoArquivo, Long Q1, Long Q2, Long bitR) {
-        Thread fifo           = new Fifo(this, conteudoArquivo, Q1, Q2);
-        Thread segundaChance  = new SegundaChance(this, conteudoArquivo, Q1, Q2, bitR);
-        Thread nur            = new Nur(this, conteudoArquivo, Q1, Q2, bitR);
-        Thread mru            = new Mru(this, conteudoArquivo, Q1, Q2);
-        Thread algoritmoOtimo = new AlgoritmoOtimo(this, conteudoArquivo, Q1, Q2);
+    private void executarThreads(String conteudoArquivo, int qFrames, Long bitR) {
+  
+        Thread fifo           = new Fifo(this, conteudoArquivo, qFrames);
+        Thread segundaChance  = new SegundaChance(this, conteudoArquivo, qFrames, bitR);
+        Thread nur            = new Nur(this, conteudoArquivo, qFrames, bitR);
+        Thread mru            = new Mru(this, conteudoArquivo, qFrames);
+        Thread algoritmoOtimo = new AlgoritmoOtimo(this, conteudoArquivo, qFrames);
         
         this.jTextField_campos_obrigatorios.setText("Executando");
         this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
@@ -496,16 +497,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.jTextArea_conteudo_do_arquivo.append(conteudoArquivo);
         
         if(conteudoArquivo != null){
-            this.executarThreads(conteudoArquivo, Q1, Q2, bitR);
             
-            Resultado resultado = new Resultado(10, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
-            this.tabelaResultado.adicionarLinha(resultado);
+                 
+            for (int i = Math.toIntExact(Q1); i <= Math.toIntExact(Q2); i++ ) {
+                this.executarThreads(conteudoArquivo, i, bitR);
+                Resultado resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+                this.tabelaResultado.adicionarLinha(resultado);
+            }
             
-            /*System.out.println("fifo " + this.resultadoFifo);
+
+            
+            System.out.println("fifo " + this.resultadoFifo);
             System.out.println("segunda chance " + this.resultadoSegundaChance);
             System.out.println("nur " + this.resultadoNur);
             System.out.println("mru " + this.resultadoMru);
-            System.out.println("otimo " + this.resultadoOtimo);*/
+            System.out.println("otimo " + this.resultadoOtimo);
         }
     }
     

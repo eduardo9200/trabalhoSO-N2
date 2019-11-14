@@ -6,42 +6,48 @@
 package br.edu.ifce.threads;
 
 import br.edu.ifce.view.TelaPrincipal;
+import java.util.Vector;
 
 /**
  *
- * @author Eduardo
+ * @author Rodrigo
  */
 public class SegundaChance extends Thread {
     private TelaPrincipal tela;
     private String conteudoArquivo;
-    private Long q1;
-    private Long q2;
+    private int qFrames;
     private Long bitR;
     private int acertos;
     
     public SegundaChance(
             TelaPrincipal tela,
             String conteudoArquivo,
-            Long q1,
-            Long q2,
+            int qFrames,
             Long bitR
     ){
         this.tela = tela;
         this.conteudoArquivo = conteudoArquivo;
-        this.q1 = q1;
-        this.q2 = q2;
+        this.qFrames = qFrames;
         this.bitR = bitR;
     };
     
+  
     @Override
     public void run() {
-        
-        /*
-            CÓDIGO SEGUNDA CHANCE AQUI
-        */
-        
-        this.acertos = -1;
+       
+        String texto = conteudoArquivo;
+        String[] numerosTexto = texto.split("-");
+        Vector<Integer> numeros = new Vector<>();
+        for (int i = 0; i < numerosTexto.length; i++) {
+            numeros.add(Integer.parseInt(numerosTexto[i]));
+        }
+         
+
+        this.acertos = numeros.size();
         this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
     }
+    
+
+    
 
 }

@@ -14,22 +14,19 @@ import br.edu.ifce.view.TelaPrincipal;
 public class Nur extends Thread {
     private TelaPrincipal tela;
     private String conteudoArquivo;
-    private Long q1;
-    private Long q2;
+    private int qFrames;
     private Long bitR;
     private int acertos;
     
     public Nur(
             TelaPrincipal tela,
             String conteudoArquivo,
-            Long q1,
-            Long q2,
+            int qFrames,
             Long bitR
     ){
         this.tela = tela;
         this.conteudoArquivo = conteudoArquivo;
-        this.q1 = q1;
-        this.q2 = q2;
+        this.qFrames = qFrames;
         this.bitR = bitR;
     };
     
