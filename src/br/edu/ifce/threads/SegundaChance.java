@@ -6,7 +6,6 @@
 package br.edu.ifce.threads;
 
 import br.edu.ifce.view.TelaPrincipal;
-import java.util.Vector;
 
 /**
  *
