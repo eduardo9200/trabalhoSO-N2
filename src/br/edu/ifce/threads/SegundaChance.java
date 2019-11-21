@@ -61,8 +61,9 @@ public class SegundaChance extends Thread {
 
             // Se a página a ser modificada for encontrada 
             if (!segunda_chance[ponteiro]) {
-                // Modifica a página 
+                // Modifica a página, inserindo a mesma com bitR true
                 arra[ponteiro] = x;
+                segunda_chance[ponteiro] = true;
 
                 // Retorna e atualiza o ponteiro 
                 return (ponteiro + 1) % qFrames;
@@ -104,8 +105,11 @@ public class SegundaChance extends Thread {
         l = strRef.length;
 
         for (i = 0; i < l; i++) {
-
+            
+            // Primeiramente, o programa verifica se está na hora de resetar os bitR para false
             if (reset == 0) {
+                
+                // Reseta todos os bitR para false
                 for (b = 0; b < qFrames; b++) {
                     segunda_chance[b] = false;
                 }
