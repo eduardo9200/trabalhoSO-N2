@@ -7,7 +7,7 @@ import br.edu.ifce.view.TelaPrincipal;
 import java.util.Arrays;
 
 /**
- * 
+ *
  * @author Rodrigo
  */
 public class SegundaChance extends Thread {
@@ -83,14 +83,19 @@ public class SegundaChance extends Thread {
     public void run() {
 
         // Ponteiros de execução
-        int ponteiro = 0, i, l, x, faltas = 0;
+        int ponteiro = 0, i, b, l, x, faltas = 0;
+        int reset = Math.toIntExact(bitR);
 
         // Cria o array das páginas a serem carregadas e muda o valor das mesmas para -1, para indicar que não estão preenchidas
         int arra[] = new int[qFrames];
         Arrays.fill(arra, -1);
 
-        // Array responsável pela Segunda Chance
+        // Array responsável pela Segunda Chance 
+        // Já começa marcado como true
         boolean segunda_chance[] = new boolean[qFrames];
+        for (b = 0; b < qFrames; b++) {
+            segunda_chance[b] = true;
+        }
 
         // Separando o texto através dos -
         // Também é criada aqui a String que servirá de referência
@@ -99,22 +104,34 @@ public class SegundaChance extends Thread {
         l = strRef.length;
 
         for (i = 0; i < l; i++) {
-            // x Recebe os valores da String referência em formato Integer
-            x = Integer.parseInt(strRef[i]);
 
-            // Verifica se há alguma página a ser substituída
-            if (!verificaAcertos(x, arra, segunda_chance, qFrames)) {
-
-                // Seleciona uma página a ser removida da memória
-                ponteiro = encontraSubstitui(x, arra, segunda_chance, qFrames, ponteiro);
+            if (reset == 0) {
+                for (b = 0; b < qFrames; b++) {
+                    segunda_chance[b] = false;
+                }
                 
-                // Marca uma falta
-                faltas++;
+                reset = Math.toIntExact(bitR);
+                
+            } else {
+                
+                // x Recebe os valores da String referência em formato Integer
+                x = Integer.parseInt(strRef[i]);
+
+                // Verifica se há alguma página a ser substituída
+                if (!verificaAcertos(x, arra, segunda_chance, qFrames)) {
+
+                    // Seleciona uma página a ser removida da memória
+                    ponteiro = encontraSubstitui(x, arra, segunda_chance, qFrames, ponteiro);
+
+                    // Marca uma falta
+                    faltas++;
+                }   
+                reset--;
             }
+
         }
 
         this.acertos = l - faltas;
-
 
         this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
 
