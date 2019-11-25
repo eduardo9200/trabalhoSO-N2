@@ -391,13 +391,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
     
-    private Long getValorQ1() {
-        Long q1;
+    private int getValorQ1() {
+        int q1;
         
-        Long q2 = Long.parseLong(this.jTextField_q2.getText());
+        int q2 = Integer.valueOf(this.jTextField_q2.getText());
         
         try {
-            q1 = Long.parseLong(this.jTextField_q1.getText());
+            q1 = Integer.valueOf(this.jTextField_q1.getText());
             
             if (q1 < 1 && q2 > 0) {
                 this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
@@ -405,14 +405,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 this.jTextField_campos_obrigatorios.setForeground(Color.RED);
                 System.out.println("NumberException: valor Q1 inválido.");
                 JOptionPane.showMessageDialog(this, "Campo Q1 não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
-                return -1L;
+                return -1;
             }else if (q1 > q2 && q2 > 0) {
                 this.jTextField_q1.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
                 this.jTextField_campos_obrigatorios.setText("Campo(s) inválido(s)");
                 this.jTextField_campos_obrigatorios.setForeground(Color.RED);
                 System.out.println("NumberException: valor Q1 inválido");
                 JOptionPane.showMessageDialog(this, "Campo Q1 deve ser menor ou igual ao campo Q2", "ERRO", JOptionPane.ERROR_MESSAGE);
-                return -1L;
+                return -1;
             }else {
                 return q1;
             }
@@ -423,15 +423,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
             this.jTextField_campos_obrigatorios.setForeground(Color.RED);
             System.out.println("NumberFormatException: falha na conversão de valores do campo Q1.");
             JOptionPane.showMessageDialog(this, "Campo Q1 só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
-            return -1L;
+            return -1;
         }
     }
     
-    private Long getValorQ2() {
-        Long q2;
+    private int getValorQ2() {
+        int q2;
         
         try {
-            q2 = Long.parseLong(this.jTextField_q2.getText());
+            q2 = Integer.valueOf(this.jTextField_q2.getText());
             
             if (q2 < 1) {
                 this.jTextField_q2.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
@@ -439,7 +439,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 this.jTextField_campos_obrigatorios.setForeground(Color.RED);
                 System.out.println("NumberException: valor Q2 inválido.");
                 JOptionPane.showMessageDialog(this, "Campo Q2 não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
-                return -1L;
+                return -1;
             }else {
                 return q2;
             }
@@ -451,15 +451,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
             this.jTextField_campos_obrigatorios.setForeground(Color.RED);
             System.out.println("NumberFormatException: falha na conversão de valores do campo Q2.");
             JOptionPane.showMessageDialog(this, "Campo Q2 só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
-            return -1L;
+            return -1;
         }
     }
     
-    private Long getValorBitR() {
-        Long bit_R;
+    private int getValorBitR() {
+        int bit_R;
         
         try {
-            bit_R = Long.parseLong(this.jTextField_bitR.getText());
+            bit_R = Integer.valueOf(this.jTextField_bitR.getText());
             
             if (bit_R < 1) {
                 this.jTextField_bitR.setBorder(BorderFactory.createLineBorder(Color.yellow, 1));
@@ -467,7 +467,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 this.jTextField_campos_obrigatorios.setForeground(Color.RED);
                 System.out.println("NumberException: valor BitR inválido.");
                 JOptionPane.showMessageDialog(this, "Campo BitR não pode ser menor que 1", "ERRO", JOptionPane.ERROR_MESSAGE);
-                return -1L;
+                return -1;
             }else {
                 return bit_R;
             }
@@ -478,7 +478,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             this.jTextField_campos_obrigatorios.setForeground(Color.RED);
             System.out.println("NumberFormatException: falha na conversão de valores do campo BIT R.");
             JOptionPane.showMessageDialog(this, "Campo BIT R só aceita números. Verifique se há espaços ou outro caractere que não seja um número", "ERRO", JOptionPane.ERROR_MESSAGE);
-            return -1L;
+            return -1;
         }
     }
     
@@ -513,7 +513,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         } 
     }
     
-    private void executarThreads(String conteudoArquivo, int qFrames, Long bitR) {
+    private void executarThreads(String conteudoArquivo, int qFrames, int bitR) {
   
         Thread fifo           = new Fifo(this, conteudoArquivo, qFrames);
         Thread segundaChance  = new SegundaChance(this, conteudoArquivo, qFrames, bitR);
@@ -533,7 +533,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.jTextField_campos_obrigatorios.setText("Finalizado");
     }
     
-    private void executarPrograma(String caminhoArquivo, Long Q1, Long Q2, Long bitR) {
+    private void executarPrograma(String caminhoArquivo, int Q1, int Q2, int bitR) {
         
         String conteudoArquivo = this.getConteudoArquivo(caminhoArquivo);
         this.jTextArea_conteudo_do_arquivo.append(conteudoArquivo);
@@ -593,9 +593,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         if(this.validarCamposDeEntrada()) {
             String arquivo = this.jTextField_caminho_do_arquivo.getText();
-            Long Q1   = this.getValorQ1();
-            Long Q2   = this.getValorQ2();
-            Long bitR = this.getValorBitR();
+            int Q1   = this.getValorQ1();
+            int Q2   = this.getValorQ2();
+            int bitR = this.getValorBitR();
             
             if(Q1 == -1L || Q2 == -1L || bitR == -1L) return; //Falha na leitura dos campos Q1, Q2 ou bitR;
             

@@ -15,14 +15,14 @@ public class Nur extends Thread {
     private TelaPrincipal tela;
     private String conteudoArquivo;
     private int qFrames;
-    private Long bitR;
+    private int bitR;
     private int acertos;
     
     public Nur(
             TelaPrincipal tela,
             String conteudoArquivo,
             int qFrames,
-            Long bitR
+            int bitR
     ){
         this.tela = tela;
         this.conteudoArquivo = conteudoArquivo;
