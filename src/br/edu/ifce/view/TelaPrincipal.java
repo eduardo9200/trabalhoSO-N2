@@ -541,20 +541,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
         if(conteudoArquivo != null){
             
                  
-            for (int i = Math.toIntExact(Q1); i <= Math.toIntExact(Q2); i++ ) {
+            for (int i = Q1; i <= Q2; i++ ) {
                 this.executarThreads(conteudoArquivo, i, bitR);
                 Resultado resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+                resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
                 this.tabelaResultado.adicionarLinha(resultado);
             }
             
-
-            
-            System.out.println("fifo " + this.resultadoFifo);
-            System.out.println("segunda chance " + this.resultadoSegundaChance);
-            System.out.println("nur " + this.resultadoNur);
-            System.out.println("mru " + this.resultadoMru);
-            System.out.println("otimo " + this.resultadoOtimo);
         }
+        
     }
     
     private void jMenuItem_sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_sobreActionPerformed

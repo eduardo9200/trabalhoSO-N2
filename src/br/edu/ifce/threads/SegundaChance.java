@@ -42,7 +42,7 @@ public class SegundaChance extends Thread {
             if (arra[i] == x) {
                 //Marca que a página merece uma segunda chance 
                 segunda_chance[i] = true;
-                acertos++;
+                this.acertos++;
                 
                 //Retorna verdadeiro, significando que houve um acerto  
                 //Sendo assim, não será necessário substituir nenhuma página 

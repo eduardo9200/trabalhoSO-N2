@@ -36,7 +36,7 @@ public class Fifo extends Thread {
 
             if (arra[i] == x) {
                 //Marca um acerto
-                acertos++;
+                this.acertos++;
 
                 //Retorna verdadeiro, significando que houve um acerto  
                 //Sendo assim, não será necessário substituir nenhuma página 
