@@ -138,7 +138,7 @@ public class SegundaChance extends Thread {
 
         }
 
-        System.out.println("Segunda Chance: " + this.acertos);
+        System.out.println("Frames: " + qFrames + ". Segunda Chance: " + this.acertos);
         this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
 
     }

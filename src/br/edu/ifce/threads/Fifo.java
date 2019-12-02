@@ -101,7 +101,7 @@ public class Fifo extends Thread {
 
         }
 
-        System.out.println("FIFO: " + this.acertos);
+        System.out.println("Frames: " + qFrames + ". FIFO: " + this.acertos);
         this.tela.setResultado("FIFO", this.acertos);
     }
 

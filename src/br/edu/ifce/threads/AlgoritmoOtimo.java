@@ -80,12 +80,12 @@ public class AlgoritmoOtimo extends Thread {
                     ponteiro = 0;
                     
                     if (max == 0) {
-                        max = 200;
+                        max = l;
                     }
 
                     for (int j = 0; j < qFrames; j++) {
                         if (index[j] == 0) {
-                            index[j] = 200;
+                            index[j] = l;
                         }
 
                         if (index[j] > max) {
@@ -127,8 +127,6 @@ public class AlgoritmoOtimo extends Thread {
 
             if (!verificaAcertos(x, arra, qFrames)) {
                 
-                // Marca uma falta
-                faltas++;
                 
                 if (esta_cheio) {
                                         
@@ -137,7 +135,11 @@ public class AlgoritmoOtimo extends Thread {
                     
                 }
 
+                // Modifica a página
                 arra[ponteiro] = x;
+                
+                // Marca uma falta
+                faltas++;
 
                 if (!esta_cheio) {
                     ponteiro++;
@@ -150,7 +152,7 @@ public class AlgoritmoOtimo extends Thread {
 
         }
         
-        System.out.println("Ótimo: " + this.acertos);
+        System.out.println("Frames: " + qFrames + ". Algorítmo Ótimo: " + this.acertos);
         this.tela.setResultado("OTIMO", this.acertos);
     }
 
