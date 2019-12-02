@@ -102,7 +102,8 @@ public class SegundaChance extends Thread {
 
         // Separando o texto através dos -
         // Também é criada aqui a String que servirá de referência
-        String texto = conteudoArquivo;
+        String texto = conteudoArquivo.replaceAll("[^\\d-]", "");
+
         String[] strRef = texto.split("-");
         l = strRef.length;
 

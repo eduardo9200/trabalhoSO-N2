@@ -55,15 +55,58 @@ public class AlgoritmoOtimo extends Thread {
         return false;
 
     }
+    
+    static int encontraSubstitui(int i, int l, String strRef[], int arra[],
+           int qFrames, int ponteiro) {
+        
+        int y;
+        int index[] = new int[qFrames];
+        boolean index_flag[] = new boolean[qFrames];
+        
+        while (true) {
+            
+            for (int j = i + 1; j < l; j++) {
+                        y = Integer.parseInt(strRef[j]);
+                        for (int k = 0; k < qFrames; k++) {
+                            if ((y == arra[k]) && (index_flag[k] == false)) {
+                                index[k] = j;
+                                index_flag[k] = true;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    int max = index[0];
+                    ponteiro = 0;
+                    
+                    if (max == 0) {
+                        max = 200;
+                    }
+
+                    for (int j = 0; j < qFrames; j++) {
+                        if (index[j] == 0) {
+                            index[j] = 200;
+                        }
+
+                        if (index[j] > max) {
+                            max = index[j];
+                            ponteiro = j;
+                        }
+                    }
+
+               return ponteiro;
+        
+        } 
+    }
 
     @Override
     public void run() {
 
-        int x, y, faltas = 0;
+        int x, faltas = 0;
 
         // Separando o texto através dos -
         // Também é criada aqui a String que servirá de referência
-        String texto = conteudoArquivo;
+        String texto = conteudoArquivo.replaceAll("[^\\d-]", "");
         String[] strRef = texto.split("-");
         int l = strRef.length;
 
@@ -83,39 +126,15 @@ public class AlgoritmoOtimo extends Thread {
             x = Integer.parseInt(strRef[i]);
 
             if (!verificaAcertos(x, arra, qFrames)) {
+                
+                // Marca uma falta
                 faltas++;
+                
                 if (esta_cheio) {
+                                        
+                    ponteiro = encontraSubstitui(i, l, strRef, arra, qFrames, ponteiro);
                     
-                    int index[] = new int[qFrames];
-                    boolean index_flag[] = new boolean[qFrames];
                     
-                    for (int j = i + 1; j < l; j++) {
-                        y = Integer.parseInt(strRef[j]);
-                        for (int k = 0; k < qFrames; k++) {
-                            if ((y == arra[k]) && (index_flag[k] == false)) {
-                                index[k] = j;
-                                index_flag[k] = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    int max = index[0];
-                    ponteiro = 0;
-                    if (max == 0) {
-                        max = 200;
-                    }
-
-                    for (int j = 0; j < qFrames; j++) {
-                        if (index[j] == 0) {
-                            index[j] = 200;
-                        }
-
-                        if (index[j] > max) {
-                            max = index[j];
-                            ponteiro = j;
-                        }
-                    }
                 }
 
                 arra[ponteiro] = x;

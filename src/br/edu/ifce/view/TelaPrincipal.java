@@ -486,7 +486,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         Path arquivo = Paths.get(caminhoArquivo);
         try {
             byte[] bytesArquivo = Files.readAllBytes(arquivo);
-            String texto = new String(bytesArquivo).replaceAll("[^\\d-]", "");
+            String texto = new String(bytesArquivo).replaceAll("[^\\d-wW]", "");
             
             return texto;
             
