@@ -1,5 +1,5 @@
 /*
- * https://gist.github.com/AidanHak/954871554c8cac3c58b4f87eaa9a54cb
+ * 
  */
 package br.edu.ifce.threads;
 
@@ -51,56 +51,60 @@ public class AlgoritmoOtimo extends Thread {
 
         }
 
-        //Retorna falso para que a página possa ser selecionada para ser substituída
+        //Retorna falso para que uma página possa ser selecionada para ser substituída
         return false;
 
     }
-    
+
     static int encontraSubstitui(int i, int l, String strRef[], int arra[],
-           int qFrames, int ponteiro) {
-        
+            int qFrames, int ponteiro) {
+
         int y;
         int index[] = new int[qFrames];
         boolean index_flag[] = new boolean[qFrames];
-        
+
         while (true) {
-            
+
+            // Atualiza o index, verificando quantas vezes o número irá se repetir
             for (int j = i + 1; j < l; j++) {
-                        y = Integer.parseInt(strRef[j]);
-                        for (int k = 0; k < qFrames; k++) {
-                            if ((y == arra[k]) && (index_flag[k] == false)) {
-                                index[k] = j;
-                                index_flag[k] = true;
-                                break;
-                            }
-                        }
+                y = Integer.parseInt(strRef[j]);
+                for (int k = 0; k < qFrames; k++) {
+                    if ((y == arra[k]) && (index_flag[k] == false)) {
+                        index[k] = j;
+                        index_flag[k] = true;
+                        break;
                     }
-                    
-                    int max = index[0];
-                    ponteiro = 0;
-                    
-                    if (max == 0) {
-                        max = l;
-                    }
+                }
+            }
 
-                    for (int j = 0; j < qFrames; j++) {
-                        if (index[j] == 0) {
-                            index[j] = l;
-                        }
+            
+            int max = index[0];
+            ponteiro = 0;
 
-                        if (index[j] > max) {
-                            max = index[j];
-                            ponteiro = j;
-                        }
-                    }
+            // Seta o index máximo possível para o length da String
+            if (max == 0) {
+                max = l;
+            }
 
-               return ponteiro;
-        
-        } 
+            for (int j = 0; j < qFrames; j++) {
+                if (index[j] == 0) {
+                    index[j] = l;
+                }
+
+                if (index[j] > max) {
+                    max = index[j];
+                    ponteiro = j;
+                }
+            }
+
+            return ponteiro;
+
+        }
     }
 
     @Override
     public void run() {
+
 
         int x, faltas = 0;
 
@@ -116,7 +120,6 @@ public class AlgoritmoOtimo extends Thread {
         int arra[] = new int[qFrames];
         Arrays.fill(arra, -1);
 
-
         for (int j = 0; j < qFrames; j++) {
             arra[j] = -1;
         }
@@ -126,21 +129,20 @@ public class AlgoritmoOtimo extends Thread {
             x = Integer.parseInt(strRef[i]);
 
             if (!verificaAcertos(x, arra, qFrames)) {
-                
-                
+
                 if (esta_cheio) {
-                                        
+
                     ponteiro = encontraSubstitui(i, l, strRef, arra, qFrames, ponteiro);
-                    
-                    
+
                 }
 
-                // Modifica a página
+                // Após encontrar o local da memória que será substituido, modifica a página
                 arra[ponteiro] = x;
-                
+
                 // Marca uma falta
                 faltas++;
 
+                // Atualizando o ponteiro para o local de memória correto depois de verificar a capacidade no encontraSubstitui
                 if (!esta_cheio) {
                     ponteiro++;
                     if (ponteiro == qFrames) {
@@ -151,7 +153,7 @@ public class AlgoritmoOtimo extends Thread {
             }
 
         }
-        
+
         System.out.println("Frames: " + qFrames + ". Algorítmo Ótimo: " + this.acertos);
         this.tela.setResultado("OTIMO", this.acertos);
     }

@@ -1,5 +1,5 @@
 /*
- * https://www.geeksforgeeks.org/second-chance-or-clock-page-replacement-policy/
+ * 
  */
 package br.edu.ifce.threads;
 
@@ -88,7 +88,7 @@ public class SegundaChance extends Thread {
 
     @Override
     public void run() {
-
+    
         // Ponteiros de execução
         int ponteiro = 0, i, b, l, x, faltas = 0;
         int reset = Math.toIntExact(bitR);

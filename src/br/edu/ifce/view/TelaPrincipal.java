@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -513,7 +516,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         } 
     }
     
-    private void executarThreads(String conteudoArquivo, int qFrames, int bitR) {
+    private void executarThreads(String conteudoArquivo, int qFrames, int bitR) throws InterruptedException {
   
         Thread fifo           = new Fifo(this, conteudoArquivo, qFrames);
         Thread segundaChance  = new SegundaChance(this, conteudoArquivo, qFrames, bitR);
@@ -525,15 +528,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
         this.jTextField_campos_obrigatorios.setForeground(Color.BLUE);
         
         fifo.start();
+        fifo.join();
         segundaChance.start();
+        segundaChance.join();
         nur.start();
+        nur.join();
         mru.start();
+        mru.join();
         algoritmoOtimo.start();
+        algoritmoOtimo.join();
         
         this.jTextField_campos_obrigatorios.setText("Finalizado");
     }
     
-    private void executarPrograma(String caminhoArquivo, int Q1, int Q2, int bitR) {
+    private void executarPrograma(String caminhoArquivo, int Q1, int Q2, int bitR) throws InterruptedException {
         
         String conteudoArquivo = this.getConteudoArquivo(caminhoArquivo);
         this.jTextArea_conteudo_do_arquivo.append(conteudoArquivo);
@@ -544,7 +552,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
             for (int i = Q1; i <= Q2; i++ ) {
                 this.executarThreads(conteudoArquivo, i, bitR);
                 Resultado resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
-                resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
                 this.tabelaResultado.adicionarLinha(resultado);
             }
             
@@ -594,7 +601,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
             
             if(Q1 == -1L || Q2 == -1L || bitR == -1L) return; //Falha na leitura dos campos Q1, Q2 ou bitR;
             
-            this.executarPrograma(arquivo, Q1, Q2, bitR);
+            try {
+                this.executarPrograma(arquivo, Q1, Q2, bitR);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
             this.reinicializarCamposDeEntrada();
             this.limparCamposDeEntrada();
