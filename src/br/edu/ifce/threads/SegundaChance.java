@@ -43,10 +43,14 @@ public class SegundaChance extends Thread {
                 //Marca que a página merece uma segunda chance 
                 segunda_chance[i] = true;
                 this.acertos++;
-                
+
                 //Retorna verdadeiro, significando que houve um acerto  
                 //Sendo assim, não será necessário substituir nenhuma página 
                 return true;
+            } else if (arra[i] == -1) {
+                //Caso o valor de arra[i] seja -1, dali pra frente a memória não estará preenchida
+                //então ele corta a verificação retornando falso.
+                return false;
             }
         }
 
@@ -58,6 +62,7 @@ public class SegundaChance extends Thread {
     // Encontra uma página na memória e retorna o ponteiro 
     static int encontraSubstitui(int x, int arra[],
             boolean segunda_chance[], int qFrames, int ponteiro) {
+
         while (true) {
 
             // Se a página a ser modificada for encontrada 
@@ -66,19 +71,16 @@ public class SegundaChance extends Thread {
                 arra[ponteiro] = x;
                 segunda_chance[ponteiro] = true;
 
-                // Retorna e atualiza o ponteiro 
+                // Atualiza e retorna o ponteiro 
                 return (ponteiro + 1) % qFrames;
             } else {
-                
+
                 // Marca o ponteiro como falso e dá a ele uma segunda chance  
                 // ele será substituído a menos que seja acessado novamente
                 segunda_chance[ponteiro] = false;
 
                 // O ponteiro é atualizado, utilizando o escalonamento Round Robin
-                // O método foi escolhido devido a sua simplicidade
-                // https://pt.wikipedia.org/wiki/Round-robin
                 ponteiro = (ponteiro + 1) % qFrames;
-
             }
 
         }
@@ -116,25 +118,26 @@ public class SegundaChance extends Thread {
 
                 reset = Math.toIntExact(bitR);
 
-            } else {
-
-                // x Recebe os valores da String referência em formato Integer
-                x = Integer.parseInt(strRef[i]);
-
-                // Verifica se há alguma página a ser substituída
-                if (!verificaAcertos(x, arra, segunda_chance, qFrames)) {
-
-                    // Seleciona uma página a ser removida da memória
-                    ponteiro = encontraSubstitui(x, arra, segunda_chance, qFrames, ponteiro);
-
-                    // Marca uma falta
-                    faltas++;
-                }
-                reset--;
             }
+
+            // x Recebe os valores da String referência em formato Integer
+            x = Integer.parseInt(strRef[i]);
+
+            // Verifica se há alguma página a ser substituída
+            if (!verificaAcertos(x, arra, segunda_chance, qFrames)) {
+
+                // Marca uma falta
+                faltas++;
+
+                // Seleciona uma página a ser removida da memória
+                ponteiro = encontraSubstitui(x, arra, segunda_chance, qFrames, ponteiro);
+
+            }
+            reset--;
 
         }
 
+        System.out.println("Segunda Chance: " + this.acertos);
         this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
 
     }

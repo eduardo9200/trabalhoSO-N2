@@ -41,7 +41,12 @@ public class Fifo extends Thread {
                 //Retorna verdadeiro, significando que houve um acerto  
                 //Sendo assim, não será necessário substituir nenhuma página 
                 return true;
+            } else if (arra[i] == -1) {
+                //Caso o valor de arra[i] seja -1, dali pra frente a memória não estará preenchida
+                //então ele corta a verificação retornando falso.
+                return false;
             }
+            
         }
 
         //Retorna falso para que a página possa ser selecionada para ser substituída
@@ -52,16 +57,13 @@ public class Fifo extends Thread {
     // Encontra uma página na memória e retorna o ponteiro 
     static int encontraSubstitui(int x, int arra[],
              int qFrames, int ponteiro) {
-        while (true) {
 
                 // Modifica a página
                 arra[ponteiro] = x;
 
                 // Retorna e atualiza o ponteiro 
                 return (ponteiro + 1) % qFrames;
- 
 
-        }
     }
     
     @Override
@@ -99,7 +101,7 @@ public class Fifo extends Thread {
 
         }
 
-        
+        System.out.println("FIFO: " + this.acertos);
         this.tela.setResultado("FIFO", this.acertos);
     }
 
