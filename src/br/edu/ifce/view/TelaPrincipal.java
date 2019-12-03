@@ -5,6 +5,7 @@
  */
 package br.edu.ifce.view;
 
+import br.edu.ifce.saida.Grafico;
 import br.edu.ifce.saida.Resultado;
 import br.edu.ifce.saida.Tabela;
 import br.edu.ifce.threads.AlgoritmoOtimo;
@@ -38,6 +39,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private int resultadoMru = 0;
     private int resultadoOtimo = 0;
     
+    Grafico grafico = new Grafico();
     Tabela tabelaResultado = new Tabela();
     /**
      * Creates new form TelaPrincipal
@@ -552,6 +554,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             for (int i = Q1; i <= Q2; i++ ) {
                 this.executarThreads(conteudoArquivo, i, bitR);
                 Resultado resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
+                this.grafico.adicionarDadoAoGrafico(i, resultado);
                 this.tabelaResultado.adicionarLinha(resultado);
             }
             

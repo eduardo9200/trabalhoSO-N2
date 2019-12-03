@@ -11,4 +11,9 @@ package br.edu.ifce.saida;
  */
 public class Grafico {
     
+    
+    
+    public void adicionarDadoAoGrafico(int numeroFrames, Resultado resultado){
+        
+    }
 }
