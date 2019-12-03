@@ -12,6 +12,7 @@ import br.edu.ifce.threads.Fifo;
 import br.edu.ifce.threads.Mru;
 import br.edu.ifce.threads.Nur;
 import br.edu.ifce.threads.SegundaChance;
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -174,7 +175,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         jTextField_campos_obrigatorios.setEditable(false);
-        jTextField_campos_obrigatorios.setBackground(new java.awt.Color(240, 240, 240));
         jTextField_campos_obrigatorios.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jTextField_campos_obrigatorios.setForeground(new java.awt.Color(255, 0, 0));
         jTextField_campos_obrigatorios.setHorizontalAlignment(javax.swing.JTextField.CENTER);
@@ -260,7 +260,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanel_telaPrincipalLayout.setHorizontalGroup(
             jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_telaPrincipalLayout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(30, Short.MAX_VALUE)
                 .addGroup(jPanel_telaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane_saida, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel_telaPrincipalLayout.createSequentialGroup()
@@ -502,16 +502,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
         }
     }
     
-    public void setResultado(String algoritmo, int resultado) {
-        if(algoritmo.equals("FIFO")) {
+    public void setResultado(TipoAlgoritmo algoritmo, int resultado) {
+        if(algoritmo.equals(TipoAlgoritmo.FIFO)) {
             this.resultadoFifo = resultado;
-        } else if(algoritmo.equals("SEGUNDA_CHANCE")) {
+        } else if(algoritmo.equals(TipoAlgoritmo.SEGUNDA_CHANCE)) {
             this.resultadoSegundaChance = resultado;
-        } else if(algoritmo.equals("NUR")) {
+        } else if(algoritmo.equals(TipoAlgoritmo.NUR)) {
             this.resultadoNur = resultado;
-        } else if(algoritmo.equals("MRU")) {
+        } else if(algoritmo.equals(TipoAlgoritmo.MRU)) {
             this.resultadoMru = resultado;
-        } else if(algoritmo.equals("OTIMO")) {
+        } else if(algoritmo.equals(TipoAlgoritmo.OTIMO)) {
             this.resultadoOtimo = resultado;
         } 
     }

@@ -3,6 +3,7 @@
  */
 package br.edu.ifce.threads;
 
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
 import java.util.Arrays;
 
@@ -101,7 +102,7 @@ public class Fifo extends Thread {
         }
 
         System.out.println("Frames: " + qFrames + ". FIFO: " + this.acertos);
-        this.tela.setResultado("FIFO", this.acertos);
+        this.tela.setResultado(TipoAlgoritmo.FIFO, this.acertos);
     }
 
 }

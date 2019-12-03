@@ -4,6 +4,7 @@
 package br.edu.ifce.threads;
 
 import br.edu.ifce.saida.Resultado;
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
 import java.util.Arrays;
 
@@ -155,7 +156,7 @@ public class AlgoritmoOtimo extends Thread {
         }
 
         System.out.println("Frames: " + qFrames + ". Algorítmo Ótimo: " + this.acertos);
-        this.tela.setResultado("OTIMO", this.acertos);
+        this.tela.setResultado(TipoAlgoritmo.OTIMO, this.acertos);
     }
 
 }

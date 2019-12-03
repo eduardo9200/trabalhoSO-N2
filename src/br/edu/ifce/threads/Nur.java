@@ -5,6 +5,7 @@
  */
 package br.edu.ifce.threads;
 
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
 
 /**
@@ -38,7 +39,7 @@ public class Nur extends Thread {
         */
         
         this.acertos = -1;
-        this.tela.setResultado("NUR", this.acertos);
+        this.tela.setResultado(TipoAlgoritmo.NUR, this.acertos);
     }
 
 }

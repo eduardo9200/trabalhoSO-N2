@@ -5,6 +5,7 @@
  */
 package br.edu.ifce.threads;
 
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
 
 /**
@@ -35,7 +36,7 @@ public class Mru extends Thread {
         */
         
         this.acertos = -1;
-        this.tela.setResultado("MRU", this.acertos);
+        this.tela.setResultado(TipoAlgoritmo.MRU, this.acertos);
     }
     
 }

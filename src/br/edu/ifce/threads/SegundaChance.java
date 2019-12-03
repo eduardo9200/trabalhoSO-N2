@@ -3,6 +3,7 @@
  */
 package br.edu.ifce.threads;
 
+import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
 import java.util.Arrays;
 
@@ -139,7 +140,7 @@ public class SegundaChance extends Thread {
         }
 
         System.out.println("Frames: " + qFrames + ". Segunda Chance: " + this.acertos);
-        this.tela.setResultado("SEGUNDA_CHANCE", this.acertos);
+        this.tela.setResultado(TipoAlgoritmo.SEGUNDA_CHANCE, this.acertos);
 
     }
 
