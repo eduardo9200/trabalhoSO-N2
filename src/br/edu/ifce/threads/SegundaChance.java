@@ -30,9 +30,7 @@ public class SegundaChance extends Thread {
         this.qFrames = qFrames;
         this.bitR = bitR;
 
-    }
-
-    ;
+    };
     
     //Se uma página for encontrada, aprimora o bitR do segunda chance para true e marca um acerto
     private boolean verificaAcertos(int x, int arra[],
