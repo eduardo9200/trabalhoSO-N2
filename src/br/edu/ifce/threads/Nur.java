@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
  */
 package br.edu.ifce.threads;
 
@@ -41,6 +39,7 @@ public class Nur extends Thread {
         
 
         this.acertos = -1;
+        System.out.println("Frames: " + qFrames + ". NUR: " + this.acertos);
         this.tela.setResultado(TipoAlgoritmo.NUR, this.acertos);
     }
 
