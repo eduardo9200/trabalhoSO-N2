@@ -26,20 +26,35 @@ public class Mru extends Thread {
         this.tela = tela;
         this.conteudoArquivo = conteudoArquivo;
         this.qFrames = qFrames;
-    };
+    }
+
+    ;
     
     
-    //Se uma página for encontrada, marca um acerto
+    
     private boolean verificaAcertos(int x, int arra[],
-            int qFrames) {
+            int qFrames, int LRU[]) {
 
         for (int i = 0; i < qFrames; i++) {
+            
+            // Incrementa o valor de todos os ponteiros LRU
+            if (arra[i] != -1) {
+                LRU[i]++;
+            }
+        }
 
+        for (int i = 0; i < qFrames; i++) {
+            
             if (arra[i] == x) {
-
+                
+                // Atualiza o ponteiro LRU
+                LRU[i] = 1;
+                
+                //Se uma página for encontrada, marca um acerto
                 this.acertos++;
+                
                 //Retorna verdadeiro, significando que houve um acerto  
-                //Sendo assim, não será necessário substituir nenhuma página 
+                //Sendo assim, não será necessário substituir nenhuma página
                 return true;
             } else if (arra[i] == -1) {
                 //Caso o valor de arra[i] seja -1, dali pra frente a memória não estará preenchida
@@ -47,31 +62,49 @@ public class Mru extends Thread {
                 return false;
             }
         }
-        
+
         //Retorna falso para que uma página possa ser selecionada para ser substituída
         return false;
 
     }
 
     // Encontra uma página na memória e retorna o ponteiro 
-    static void encontraSubstitui(int x, int arra[],
-           int ponteiro) {
+    static int encontraSubstitui(int x, int arra[],
+            int ponteiro, int qFrames, boolean esta_cheio, int LRU[]) {
 
-        // Modifica a página
-        arra[ponteiro] = x;
-    }
+        // Ponteiro para verificar o LRU
+        int menor = 0;
 
-    static int ponteiroMRU(int x, int arra[],
-            int qFrames) {
+        if (!esta_cheio) {
+            // Modifica a página
+            arra[ponteiro] = x;
+            
+            // Modifica o LRU para 1
+            LRU[ponteiro] = 1;
+            ponteiro++;
 
-        while (true) {
+            // Retorna o ponteiro atual
+            return ponteiro;
+
+        } else {
+
+            // Verifica qual oi o Least Recently Used (LRU)
             for (int i = 0; i < qFrames; i++) {
-
-                if (arra[i] == x) {
-                    // Atualiza e retorna o ponteiro
-                    return i;
+                if (menor < LRU[i]) {
+                    menor = LRU[i];
+                    
+                    // O novo ponteiro é o LRU
+                    ponteiro = i;
                 }
             }
+
+            // Modifica a página
+            arra[ponteiro] = x;
+            
+            // Modifica o LRU para 
+            LRU[ponteiro] = 1;
+
+            return ponteiro;
 
         }
 
@@ -90,6 +123,10 @@ public class Mru extends Thread {
         int arra[] = new int[qFrames];
         Arrays.fill(arra, -1);
 
+        // Cria o array contador responsável pela lógica LRU
+        int LRU[] = new int[qFrames];
+        Arrays.fill(arra, -1);
+
         // Separando o texto através dos -
         // Também é criada aqui a String que servirá de referência
         String texto = conteudoArquivo.replaceAll("[^\\d-]", "");
@@ -102,42 +139,26 @@ public class Mru extends Thread {
             x = Integer.parseInt(strRef[i]);
 
             // Verifica se há alguma página a ser substituída
-            if (!verificaAcertos(x, arra, qFrames)) {
+            if (!verificaAcertos(x, arra, qFrames, LRU)) {
 
                 // Marca uma falta
                 faltas++;
 
-                // Caso o array ainda não esteja cheio, ele simplesmente aloca a página no endereço da memória
-                if (!esta_cheio) {
-                    
-                    // Seleciona uma página a ser removida da memória
-                    encontraSubstitui(x, arra, ponteiro);
-                    
-                    // Incrementa o ponteiro
-                    ponteiro++;
+                // Seleciona uma página a ser removida da memória
+                ponteiro = encontraSubstitui(x, arra, ponteiro, qFrames, esta_cheio, LRU);
 
-                    // Verificação de se a memória está cheia
-                    if (ponteiro == qFrames) {
-                        ponteiro = ponteiro - 1;
-                        esta_cheio = true;
-                    }
+            }
 
-                // Quando a memória estiver cheia, ele apenas irá substituir o usado mais recentemente(MRU)
-                } else {
-                    encontraSubstitui(x, arra, ponteiro);
-                }
-
-            } else {
-                
-                // Quando houver um acerto e a memória estiver cheia, ele apontará para o acerto, pois este foi o usado mais recentemente(MRU)
-                if (esta_cheio) {
-                    ponteiro = ponteiroMRU(x, arra, qFrames);
-                }
+            // Verificação de se a memória está cheia
+            if (ponteiro == qFrames) {
+                ponteiro = ponteiro - 1;
+                esta_cheio = true;
             }
 
         }
 
-        // Resposta esperada MRU = 69.897
+        // Apesar do nome MRU em português, o algoritmo é conhecido como LRU(Least Used Recently), deve se tomar cuidado, porque
+        // existe um algoritmo MRU que significa algo totalmente diferente.
         System.out.println("Frames: " + qFrames + ". MRU: " + this.acertos);
         this.tela.setResultado(TipoAlgoritmo.MRU, this.acertos);
     }
