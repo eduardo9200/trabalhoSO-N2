@@ -11,10 +11,10 @@ package br.edu.ifce.tiposAlgoritmos;
  */
 public enum TipoAlgoritmo {
     FIFO("FIFO"),
-    SEGUNDA_CHANCE("SEGUNDA_CHANCE"),
+    SEGUNDA_CHANCE("SEGUNDA CHANCE"),
     NUR("NUR"),
     MRU("MRU"),
-    OTIMO("OTIMO");
+    OTIMO("ÓTIMO");
     
     private final String valor;
     

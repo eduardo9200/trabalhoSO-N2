@@ -14,6 +14,7 @@ import br.edu.ifce.threads.Mru;
 import br.edu.ifce.threads.Nur;
 import br.edu.ifce.threads.SegundaChance;
 import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import org.jfree.chart.ChartPanel;
 
 /**
  *
@@ -39,7 +41,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private int resultadoMru = 0;
     private int resultadoOtimo = 0;
     
-    Grafico grafico = new Grafico();
+    Grafico grafico = new Grafico(this);
     Tabela tabelaResultado = new Tabela();
     /**
      * Creates new form TelaPrincipal
@@ -89,7 +91,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Algoritmos de Substituição de Páginas");
-        setMaximumSize(new java.awt.Dimension(900, 600));
         setMinimumSize(new java.awt.Dimension(900, 600));
 
         jPanel_telaPrincipal.setMaximumSize(new java.awt.Dimension(900, 600));
@@ -158,7 +159,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel_entrada_de_dadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel_q1)
-                    .addComponent(jTextField_q1)
+                    .addComponent(jTextField_q1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_q2)
                     .addComponent(jTextField_q2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_bitR)
@@ -198,10 +199,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jPanel_execucaoLayout.setVerticalGroup(
             jPanel_execucaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_execucaoLayout.createSequentialGroup()
-                .addGap(9, 9, 9)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton_executar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField_campos_obrigatorios)
+                .addComponent(jTextField_campos_obrigatorios, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -215,7 +216,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         );
         jPanel_graficoLayout.setVerticalGroup(
             jPanel_graficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 321, Short.MAX_VALUE)
+            .addGap(0, 345, Short.MAX_VALUE)
         );
 
         jTabbedPane_saida.addTab("GRÁFICO", jPanel_grafico);
@@ -246,7 +247,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
             jPanel_tabelaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_tabelaLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 291, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -280,7 +281,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     .addComponent(jPanel_entrada_de_dados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel_execucao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane_saida, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane_saida, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -550,16 +551,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         if(conteudoArquivo != null){
             
-                 
             for (int i = Q1; i <= Q2; i++ ) {
                 this.executarThreads(conteudoArquivo, i, bitR);
                 Resultado resultado = new Resultado(i, resultadoFifo, resultadoSegundaChance, resultadoNur, resultadoMru, resultadoOtimo);
                 this.grafico.adicionarDadoAoGrafico(i, resultado);
                 this.tabelaResultado.adicionarLinha(resultado);
             }
-            
+            this.grafico.criarGrafico();
         }
-        
+    }
+    
+    public void setGrafico(ChartPanel painel) {
+        this.jPanel_grafico.setLayout(new java.awt.BorderLayout());
+        this.jPanel_grafico.add(painel, BorderLayout.CENTER);
+        this.jPanel_grafico.validate();
     }
     
     private void jMenuItem_sobreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_sobreActionPerformed
