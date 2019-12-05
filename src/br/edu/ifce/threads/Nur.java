@@ -5,6 +5,7 @@ package br.edu.ifce.threads;
 
 import br.edu.ifce.tiposAlgoritmos.TipoAlgoritmo;
 import br.edu.ifce.view.TelaPrincipal;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -36,25 +37,13 @@ public class Nur extends Thread {
    
    //Se uma página for encontrada, aprimora o bitR do segunda chance para true e marca um acerto
     private boolean verificaAcertos(int x, int arra[],
-            boolean[] bit_R, boolean[] bit_M, boolean m_flag, int qFrames, int LRU[]) {
-
-        for (int i = 0; i < qFrames; i++) {
-
-            // Incrementa o valor de todos os ponteiros LRU
-            if (arra[i] != -1) {
-                LRU[i]++;
-            }
-
-        }
+            boolean[] bit_R, boolean[] bit_M, boolean m_flag, int qFrames) {
 
         for (int i = 0; i < qFrames; i++) {
 
             if (arra[i] == x) {
 
                 this.acertos++;
-
-                // Atualiza o ponteiro LRU
-                LRU[i] = 1;
 
                 //Marca que o BitR como true, pois a página foi referênciada 
                 bit_R[i] = true;
@@ -80,10 +69,10 @@ public class Nur extends Thread {
     }
 
     // Encontra uma página na memória e retorna o ponteiro 
-    static int encontraSubstitui(int x, int classe[], int arra[],
-            boolean[] bit_R, boolean[] bit_M, boolean m_flag, int qFrames, int ponteiro, boolean esta_cheio, int LRU[]) {
+    static int encontraSubstitui(int x, int menorClasse, int classe[], int arra[],
+            boolean[] bit_R, boolean[] bit_M, boolean m_flag, int qFrames, int ponteiro, boolean esta_cheio) {
 
-        int menor = 0;
+        menorClasse = 4;
 
         if (!esta_cheio) {
             // Modifica a página, inserindo a mesma com bitR true
@@ -95,70 +84,65 @@ public class Nur extends Thread {
                 bit_M[ponteiro] = true;
             }
 
-            // Modifica o LRU para 1
-            LRU[ponteiro] = 1;
-
             // Atualiza e retorna o ponteiro 
             ponteiro++;
             return ponteiro;
 
         } else {
 
-            for (int i = 0; i < qFrames; i++) {
-
-                // Classe 0: não referenciada, não modificada;
-                if (!bit_R[i] && !bit_M[i]) {
-                    classe[i] = 0;
-                }
-                // Classe 1: não referenciada, modificada;
-                if (!bit_R[i] && bit_M[i]) {
-                    classe[i] = 1;
-                }
-                // Classe 2: referenciada, não modificada;
-                if (bit_R[i] && !bit_M[i]) {
-                    classe[i] = 2;
-                }
-                // Classe 3: referenciada, modificada
-                if (bit_R[i] && bit_M[i]) {
-                    classe[i] = 3;
-                }
-            }
-
-            int menorClasse = 4;
-
-            for (int i = 0; i < qFrames; i++) {
-                if (classe[i] <= menorClasse) {
-                    menorClasse = classe[i];
-                }
-            }
-
-            // Verifica qual oi o Least Recently Used (LRU)
-            for (int i = 0; i < qFrames; i++) {
-                if (classe[i] == menorClasse) {
-                    if (menor < LRU[i]) {
-                        menor = LRU[i];
-
-                        // O novo ponteiro é o LRU
+            while (true) {
+                for (int i = 0; i < qFrames; i++) {
+                    if (menorClasse == classe[i]) {
                         ponteiro = i;
                     }
+                    
+                    arra[ponteiro] = x;
+                    bit_R[ponteiro] = true;
+
+                    // Verifica se está recebendo um WRITE e seta o BitM como true
+                    if (m_flag) {
+                        bit_M[ponteiro] = true;
+                    }
+                    
+                    ponteiro = (ponteiro + 1) % qFrames;
+                    
+                    return ponteiro;
                 }
-
             }
-
-            arra[ponteiro] = x;
-            bit_R[ponteiro] = true;
-
-            // Modifica o LRU para 
-            LRU[ponteiro] = 1;
-
-            // Verifica se está recebendo um WRITE e seta o BitM como true
-            if (m_flag) {
-                bit_M[ponteiro] = true;
-            }
-
-            return ponteiro;
 
         }
+
+    }
+
+    private int retornaClasse(int menorClasse, int classe[], boolean[] bit_R, boolean[] bit_M, int qFrames) {
+
+        for (int i = 0; i < qFrames; i++) {
+
+            // Classe 0: não referenciada, não modificada;
+            if (!bit_R[i] && !bit_M[i]) {
+                classe[i] = 0;
+            }
+            // Classe 1: não referenciada, modificada;
+            if (!bit_R[i] && bit_M[i]) {
+                classe[i] = 1;
+            }
+            // Classe 2: referenciada, não modificada;
+            if (bit_R[i] && !bit_M[i]) {
+                classe[i] = 2;
+            }
+            // Classe 3: referenciada, modificada
+            if (bit_R[i] && bit_M[i]) {
+                classe[i] = 3;
+            }
+        }
+
+        for (int i = 0; i < qFrames; i++) {
+            if (menorClasse < classe[i]) {
+                menorClasse = classe[i];
+            }
+        }
+        return menorClasse;
+
     }
 
     @Override
@@ -167,6 +151,7 @@ public class Nur extends Thread {
         // Ponteiros de execução
         int ponteiro = 0, i, b, L, x, faltas = 0;
         int reset = Math.toIntExact(bitR);
+        boolean m_Flag = false;
 
         // Essa variável define a qual classe cada espaço na memória pertence.
         int classe[] = new int[qFrames];
@@ -174,10 +159,6 @@ public class Nur extends Thread {
 
         // Cria o array das páginas a serem carregadas e muda o valor das mesmas para -1, para indicar que não estão preenchidas
         int arra[] = new int[qFrames];
-        Arrays.fill(arra, -1);
-
-        // Cria o array contador responsável pela lógica LRU
-        int LRU[] = new int[qFrames];
         Arrays.fill(arra, -1);
 
         // Array responsável pelos BitR
@@ -198,6 +179,8 @@ public class Nur extends Thread {
 
         // Ponteiro para verificar array cheio ou com espaço
         boolean esta_cheio = false;
+
+        int menorClasse = 4;
 
         for (i = 0; i < L; i++) {
             if (strRef_W[i].contains("W")) {
@@ -221,15 +204,20 @@ public class Nur extends Thread {
 
             // x Recebe os valores da String referência em formato Integer
             x = Integer.parseInt(strRef[i]);
+            m_Flag = bit_M_flag[i];
 
             // Verifica se há alguma página a ser substituída
-            if (!verificaAcertos(x, arra, bit_R, bit_M, bit_M_flag[i], qFrames, LRU)) {
+            if (!verificaAcertos(x, arra, bit_R, bit_M, m_Flag, qFrames)) {
 
                 // Marca uma falta
                 faltas++;
+                
+                if (esta_cheio) {
+                     menorClasse = retornaClasse(menorClasse, classe, bit_R, bit_M, qFrames);
+                }
 
                 // Seleciona uma página a ser removida da memória
-                ponteiro = encontraSubstitui(x, classe, arra, bit_R, bit_M, bit_M_flag[i], qFrames, ponteiro, esta_cheio, LRU);
+                ponteiro = encontraSubstitui(x, menorClasse, classe, arra, bit_R, bit_M, m_Flag, qFrames, ponteiro, esta_cheio);
 
             }
 
